@@ -28,8 +28,6 @@ public class User implements UserDetails {
 
     private String lastName;
 
-    private String specialization;
-
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -42,12 +40,6 @@ public class User implements UserDetails {
     @Column(name = "is_email_verificated")
     private Boolean isEmailVerificated;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
-
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
-
     @Column(name = "date_create")
     private LocalDateTime dateCreate;
 
@@ -59,8 +51,6 @@ public class User implements UserDetails {
 
     @PrePersist
     public void prePersist() {
-        this.isActive = Boolean.TRUE;
-        this.isDeleted = Boolean.FALSE;
         this.isEmailVerificated = Boolean.FALSE;
         this.dateCreate = LocalDateTime.now();
         if (roles.isEmpty()) {
