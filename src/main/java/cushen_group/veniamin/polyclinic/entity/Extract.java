@@ -8,11 +8,11 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "discharges")
+@Table(name = "Extracts")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Discharge {
+public class Extract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,12 +40,12 @@ public class Discharge {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof Discharge)) {
+        if (!(obj instanceof Extract)) {
             return false;
         }
 
-        Discharge otherDischarge = (Discharge) obj;
-        return this.getId().equals(otherDischarge.getId());
+        Extract otherExtract = (Extract) obj;
+        return this.getId().equals(otherExtract.getId());
     }
 
 }

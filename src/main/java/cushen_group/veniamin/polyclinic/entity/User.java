@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String password;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Discharge> discharges = new ArrayList<>();
+    private List<Extract> extracts = new ArrayList<>();
 
     @Column(name = "date_create")
     private LocalDateTime dateCreate;
