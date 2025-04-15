@@ -8,13 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Table(name = "doctors")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,9 +21,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private String surname;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -34,27 +31,23 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-    private List<Discharge> discharges;
-
-    @Column(name = "is_email_verificated")
-    private Boolean isEmailVerificated;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Discharge> discharges = new ArrayList<>();
 
     @Column(name = "date_create")
     private LocalDateTime dateCreate;
 
-    @CollectionTable(name = "doctor_role", joinColumns = @JoinColumn(name = "doctor_id"))
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "id"))
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @Column(name = "doctor_role")
+    @Column(name = "user_role")
     private Set<Role> roles = new HashSet<>();
 
     @PrePersist
     public void prePersist() {
-        this.isEmailVerificated = Boolean.FALSE;
         this.dateCreate = LocalDateTime.now();
         if (roles.isEmpty()) {
-            roles.add(Role.DOCTOR);
+            roles.add(Role.PATIENT);
         }
     }
 

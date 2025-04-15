@@ -10,14 +10,12 @@ public class UserRespDTO {
 
     private Long id;
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private String surname;
 
     private String email;
 
     private List<Role> roles;
-
-    private Boolean isEmailVerificated;
 
 }

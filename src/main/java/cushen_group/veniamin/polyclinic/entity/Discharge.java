@@ -32,7 +32,6 @@ public class Discharge {
     @JoinColumn(name = "patient_id", nullable = false)
     private User patient;
 
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

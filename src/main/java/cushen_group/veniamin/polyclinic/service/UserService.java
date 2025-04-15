@@ -1,40 +1,32 @@
 package cushen_group.veniamin.polyclinic.service;
 
-import cushen_group.veniamin.polyclinic.dto.ActionWithUserStatusResponseDTO;
-import cushen_group.veniamin.polyclinic.dto.request.ChangePasswordReqDTO;
-import cushen_group.veniamin.polyclinic.dto.request.UpdateCurrentUserReqDTO;
 import cushen_group.veniamin.polyclinic.dto.request.UserCreateReqDTO;
 import cushen_group.veniamin.polyclinic.dto.request.UserUpdateReqDTO;
 import cushen_group.veniamin.polyclinic.dto.response.UserRespDTO;
 import cushen_group.veniamin.polyclinic.entity.Role;
 import cushen_group.veniamin.polyclinic.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 
 public interface UserService extends UserDetailsService {
 
-    UserRespDTO getCurrentUserInfo();
+    UserDetails loadUserByUsername(String username);
 
-    UserRespDTO updateCurrentUser(UpdateCurrentUserReqDTO updateCurrentUserReqDTO, MultipartFile avatar);
+    List<User> getAllUsers();
 
-    void changePassword(ChangePasswordReqDTO changePasswordReqDTO);
+    User getUserById(Long id);
 
-    UserRespDTO getUserById(Long id);
+    User createUser(UserCreateReqDTO userCreateReqDTO);
 
-    ActionWithUserStatusResponseDTO deleteUserById(Long id);
+    User updateUser(UserUpdateReqDTO userUpdateReqDTO, Long userId);
 
-    UserRespDTO createUser(UserCreateReqDTO userCreateReqDTO);
-
-    UserRespDTO updateUser(UserUpdateReqDTO userUpdateReqDTO, Long userId);
-
-    void logout();
+    boolean deleteUserById(Long userId);
 
     List<Role> getRoles();
 
     UserRespDTO getResponseDTO(User user);
+
 }
