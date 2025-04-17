@@ -9,5 +9,4 @@ public class PolyclinicApplication {
     public static void main(String[] args) {
         SpringApplication.run(PolyclinicApplication.class, args);
     }
-
 }
