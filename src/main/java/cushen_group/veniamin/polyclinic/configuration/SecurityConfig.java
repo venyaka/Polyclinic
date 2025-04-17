@@ -42,14 +42,14 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login.xhtml", "/register.xhtml", "/register_patient.xhtml", "/javax.faces.resource/**").permitAll()
-                        .requestMatchers("/views/admin.xhtml").hasRole("ADMIN")
-                        .requestMatchers("/views/doctor.xhtml").hasRole("DOCTOR")
-                        .requestMatchers("/views/patient.xhtml").hasRole("PATIENT")
+                        .requestMatchers("/login", "/home","/register", "/javax.faces.resource/**").permitAll()
+                        .requestMatchers("/admin.xhtml").hasRole("ADMIN")
+                        .requestMatchers("/doctor.xhtml").hasRole("DOCTOR")
+                        .requestMatchers("/patient.xhtml").hasRole("PATIENT")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login.xhtml")
+                        .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/views/doctor.xhtml", true)
                         .permitAll()
@@ -64,8 +64,8 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
-    public static ServletListenerRegistrationBean httpSessionEventPublisher() {
-        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
-    }
+//    @Bean
+//    public static ServletListenerRegistrationBean httpSessionEventPublisher() {
+//        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
+//    }
 }
