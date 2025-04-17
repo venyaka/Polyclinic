@@ -6,11 +6,15 @@ import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 
 @Getter
 @Setter
 @Component(value = "homeBean")
 @ViewScoped
-public class HomeBean {
-    private String text;
+public class HomeBean implements Serializable {
+    public String getWelcomeMessage() {
+        return "Добро пожаловать в систему!";
+    }
 }
