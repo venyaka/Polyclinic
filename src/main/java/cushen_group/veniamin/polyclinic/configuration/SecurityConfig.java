@@ -4,22 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 
 @Configuration
 @EnableWebSecurity
@@ -36,36 +30,37 @@ public class SecurityConfig {
         return source;
     }
 
-    //ALL UNAUTHORIZED ENDPOINTS SHOULD START WITH /public;
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/home","/register", "/javax.faces.resource/**").permitAll()
-                        .requestMatchers("/admin.xhtml").hasRole("ADMIN")
-                        .requestMatchers("/doctor.xhtml").hasRole("DOCTOR")
-                        .requestMatchers("/patient.xhtml").hasRole("PATIENT")
+                        .requestMatchers("/login", "/home","/register", "/jakarta.faces.resource/**", "/register/verification").permitAll()
+//                        .requestMatchers("/**").permitAll() // only for develop
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/doctor").hasRole("DOCTOR")
+                        .requestMatchers("/patient").hasRole("PATIENT")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/views/doctor.xhtml", true)
+                        .successForwardUrl("/home")
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login.xhtml")
+                        .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()
                 )
                 .build();
     }
-
-//    @Bean
-//    public static ServletListenerRegistrationBean httpSessionEventPublisher() {
-//        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
-//    }
 }
