@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:faces="jakarta.faces"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:cc="jakarta.faces.composite"
+                xmlns:c="jakarta.tags.core"
+                xmlns:p="primefaces"
+                xmlns:fn="jakarta.tags.functions"
+                template="layout.xhtml">
+
+    <ui:define name="title">Doctor Cabinet</ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:panel header="Create Medical Record">
+                <p:button outcome="/extract" value="Create extract"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
