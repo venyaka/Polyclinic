@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:faces="jakarta.faces"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:cc="jakarta.faces.composite"
+                xmlns:c="jakarta.tags.core"
+                xmlns:p="primefaces"
+                xmlns:fn="jakarta.tags.functions"
+                template="../layout.xhtml">
+
+    <ui:define name="title">Verification</ui:define>
+
+    <ui:define name="content">
+        <ui:define name="content">
+            <h1>Successed verification!</h1>
+        </ui:define>
+        <p:panel header="Successed verification">
+            <p:button outcome="/login" value="Login"/>
+        </p:panel>
+
+    </ui:define>
+
+</ui:composition>
