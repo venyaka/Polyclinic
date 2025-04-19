@@ -3,19 +3,24 @@ package cushen_group.veniamin.polyclinic.service.impl;
 import cushen_group.veniamin.polyclinic.dto.request.ExtractCreateReqDTO;
 import cushen_group.veniamin.polyclinic.dto.request.ExtractUpdateReqDTO;
 import cushen_group.veniamin.polyclinic.entity.Extract;
-import cushen_group.veniamin.polyclinic.entity.Role;
 import cushen_group.veniamin.polyclinic.entity.User;
-import cushen_group.veniamin.polyclinic.exception.BadRequestException;
 import cushen_group.veniamin.polyclinic.exception.NotFoundException;
-import cushen_group.veniamin.polyclinic.exception.errors.BadRequestError;
 import cushen_group.veniamin.polyclinic.exception.errors.NotFoundError;
 import cushen_group.veniamin.polyclinic.repository.ExtractRepository;
 import cushen_group.veniamin.polyclinic.repository.UserRepository;
 import cushen_group.veniamin.polyclinic.service.ExtractService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -54,7 +59,8 @@ public class ExtractServiceImpl implements ExtractService {
         extract.setDoctor(optionalDoctor.get());
 
         extract.setDate(extractCreateReqDTO.getDate());
-        extract.setText(extractCreateReqDTO.getText());
+        extract.setDiagnosis(extractCreateReqDTO.getDiagnosis());
+        extract.setPrescription(extractCreateReqDTO.getPrescription());
 
         extractRepository.save(extract);
 
@@ -82,11 +88,53 @@ public class ExtractServiceImpl implements ExtractService {
         extract.setDoctor(optionalDoctor.get());
 
         extract.setDate(extractUpdateReqDTO.getDate());
-        extract.setText(extractUpdateReqDTO.getText());
+        extract.setDiagnosis(extractUpdateReqDTO.getDiagnosis());
+        extract.setPrescription(extractUpdateReqDTO.getPrescription());
 
         extractRepository.save(extract);
 
         return extract;
+    }
+
+
+    public StreamedContent getExcelExport(ExtractCreateReqDTO extractCreateReqDTO) {
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Extract");
+
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Дата");
+            header.createCell(1).setCellValue("Врач");
+            header.createCell(2).setCellValue("Пациент");
+            header.createCell(3).setCellValue("Диагноз");
+            header.createCell(4).setCellValue("Назначение");
+
+            Row data = sheet.createRow(1);
+            data.createCell(0).setCellValue(extractCreateReqDTO.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            data.createCell(1).setCellValue(extractCreateReqDTO.getDoctorEmail());
+            data.createCell(2).setCellValue(extractCreateReqDTO.getPatientEmail());
+            data.createCell(3).setCellValue(extractCreateReqDTO.getDiagnosis());
+            data.createCell(4).setCellValue(extractCreateReqDTO.getPrescription());
+
+            for (int i = 0; i < 5; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            workbook.write(out);
+
+            InputStream inputStream = new ByteArrayInputStream(out.toByteArray());
+
+            return DefaultStreamedContent.builder()
+                    .name("extract.xlsx")
+                    .contentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    .stream(() -> inputStream)
+                    .build();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
