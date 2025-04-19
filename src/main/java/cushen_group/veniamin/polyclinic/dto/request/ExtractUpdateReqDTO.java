@@ -12,7 +12,10 @@ public class ExtractUpdateReqDTO {
     private LocalDate date;
 
     @Size(max = 5000, message = "Количество символов не должно превышать 5000")
-    private String text;
+    private String diagnosis;
+
+    @Size(max = 5000, message = "Количество символов не должно превышать 5000")
+    private String prescription;
 
     @Email
     private String doctorEmail;
