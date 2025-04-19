@@ -1,6 +1,5 @@
 package cushen_group.veniamin.polyclinic.service;
 
-import cushen_group.veniamin.polyclinic.dto.request.UserCreateReqDTO;
 import cushen_group.veniamin.polyclinic.dto.request.UserUpdateReqDTO;
 import cushen_group.veniamin.polyclinic.dto.response.UserRespDTO;
 import cushen_group.veniamin.polyclinic.entity.Role;
@@ -19,7 +18,7 @@ public interface UserService extends UserDetailsService {
 
     User getUserById(Long id);
 
-    User createUser(UserCreateReqDTO userCreateReqDTO);
+//    User createUser(UserCreateReqDTO userCreateReqDTO);
 
     User updateUser(UserUpdateReqDTO userUpdateReqDTO, Long userId);
 

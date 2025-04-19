@@ -1,6 +1,5 @@
 package cushen_group.veniamin.polyclinic.service.impl;
 
-import cushen_group.veniamin.polyclinic.dto.request.UserCreateReqDTO;
 import cushen_group.veniamin.polyclinic.dto.request.UserUpdateReqDTO;
 import cushen_group.veniamin.polyclinic.dto.response.UserRespDTO;
 import cushen_group.veniamin.polyclinic.entity.Role;
@@ -31,9 +30,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println("loadUserByUsername " + "email " + email);
         return userRepository
-                .findByEmail(username)
+                .findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(NotFoundError.USER_NOT_FOUND));
     }
 
@@ -61,30 +61,30 @@ public class UserServiceImpl implements UserService {
         return optionalUser.get();
     }
 
-    @Override
-    public User createUser(UserCreateReqDTO userCreateReqDTO) {
-        Optional<User> optionalUser = userRepository.findByEmail(userCreateReqDTO.getEmail());
-        if (optionalUser.isPresent()) {
-            throw new BadRequestException(BadRequestError.USER_ALREADY_EXISTS);
-        }
-
-        User user = new User();
-        user.setName(userCreateReqDTO.getName());
-        user.setSurname(userCreateReqDTO.getSurname());
-        user.setEmail(userCreateReqDTO.getEmail());
-        user.setRoles((Set<Role>) userCreateReqDTO.getRoles());
-        user.setPassword(passwordEncoder.encode("12345Qazdevelop"));
-
-        if (null != userCreateReqDTO.getRoles() && !userCreateReqDTO.getRoles().isEmpty()) {
-            user.setRoles(userCreateReqDTO.getRoles().stream().collect(Collectors.toSet()));
-        } else {
-            user.setRoles(Set.of(Role.PATIENT));
-        }
-
-        userRepository.save(user);
-
-        return user;
-    }
+//    @Override
+//    public User createUser(UserCreateReqDTO userCreateReqDTO) {
+//        Optional<User> optionalUser = userRepository.findByEmail(userCreateReqDTO.getEmail());
+//        if (optionalUser.isPresent()) {
+//            throw new BadRequestException(BadRequestError.USER_ALREADY_EXISTS);
+//        }
+//
+//        User user = new User();
+//        user.setName(userCreateReqDTO.getName());
+//        user.setSurname(userCreateReqDTO.getSurname());
+//        user.setEmail(userCreateReqDTO.getEmail());
+//        user.setRoles((Set<Role>) userCreateReqDTO.getRoles());
+//        user.setPassword(passwordEncoder.encode("12345Qazdevelop"));
+//
+//        if (null != userCreateReqDTO.getRoles() && !userCreateReqDTO.getRoles().isEmpty()) {
+//            user.setRoles(userCreateReqDTO.getRoles().stream().collect(Collectors.toSet()));
+//        } else {
+//            user.setRoles((Set<Role>) userCreateReqDTO.getRoles());
+//        }
+//
+//        userRepository.save(user);
+//
+//        return user;
+//    }
 
     @Override
     public User updateUser(UserUpdateReqDTO userUpdateReqDTO, Long userId) {

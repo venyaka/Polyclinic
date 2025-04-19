@@ -37,6 +37,12 @@ public class User implements UserDetails {
     @Column(name = "date_create")
     private LocalDateTime dateCreate;
 
+    @Column(name = "is_email_verificated")
+    private Boolean isEmailVerificated;
+
+    @Column(name = "token")
+    private String token;
+
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "id"))
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
@@ -47,7 +53,7 @@ public class User implements UserDetails {
     public void prePersist() {
         this.dateCreate = LocalDateTime.now();
         if (roles.isEmpty()) {
-            roles.add(Role.PATIENT);
+            roles.add(Role.ROLE_PATIENT);
         }
     }
 
