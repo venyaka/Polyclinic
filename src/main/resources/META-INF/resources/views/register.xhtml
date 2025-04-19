@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:faces="jakarta.faces"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:cc="jakarta.faces.composite"
+                xmlns:c="jakarta.tags.core"
+                xmlns:p="primefaces"
+                xmlns:fn="jakarta.tags.functions"
+                template="layout.xhtml">
+
+    <ui:define name="title">Register</ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:panel header="Register">
+                <p:panelGrid columns="2">
+
+                    <p:outputLabel value="Name:" />
+                    <p:inputText value="#{registerBean.name}" />
+
+                    <p:outputLabel value="Surname:" />
+                    <p:inputText value="#{registerBean.surname}" />
+
+                    <p:outputLabel value="Email:" />
+                    <p:inputText value="#{registerBean.email}" />
+
+                    <p:outputLabel value="Password:" />
+                    <p:password value="#{registerBean.password}" />
+
+                    <p:outputLabel value="Role:" />
+                    <p:selectOneMenu value="#{registerBean.role}">
+                        <f:selectItem itemLabel="Doctor" itemValue="ROLE_DOCTOR" />
+                        <f:selectItem itemLabel="Patient" itemValue="ROLE_PATIENT" />
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton value="Register" action="#{registerBean.registerUser}" />
+                <p:commandButton value="Send verification code" action="#{registerBean.sendVerificationCode}" />
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

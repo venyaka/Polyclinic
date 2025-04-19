@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-<f:view>
-    <h:head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title><ui:insert name="title">Default title</ui:insert></title>
-    </h:head>
-    <h:body>
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <p:growl for="errors" showDetail="true" autoUpdate="true"/>
-            </div>
-            <div class="ui-g-12">
-                <p:toolbar>
-                    <f:facet name="left">
-                        <p:button href="/" value="List of Products" />
-                        <p:button href="/product" value="New Product" />
-                    </f:facet>
-                </p:toolbar>
-            </div>
-            <div class="ui-g-12">
-                <ui:insert name="content">Default content</ui:insert>
-            </div>
-        </div>
-    </h:body>
-</f:view>
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title><ui:insert name="title">App</ui:insert></title>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+        <h:outputStylesheet library="assets" name="css/style.css"/>
+</h:head>
+<h:body>
+    <div class="wrapper">
+        <header class="header">
+            <p:outputPanel layout="block" class="header__container">
+                <p:button outcome="/home" value="Home"/>
+                <p:button outcome="/login" value="Login"/>
+                <p:button outcome="/register" value="Register"/>
+                <p:button outcome="/doctor" value="Doctor Cabinet"/>
+            </p:outputPanel>
+        </header>
+        <section>
+            <ui:insert class="flex justify-content-center flex-wrap" name="content"/>
+        </section>
+    </div>
+</h:body>
 </html>

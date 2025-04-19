@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:faces="jakarta.faces"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:cc="jakarta.faces.composite"
+                xmlns:c="jakarta.tags.core"
+                xmlns:p="primefaces"
+                xmlns:fn="jakarta.tags.functions"
+                template="layout.xhtml">
+
+    <ui:define name="content">
+        <h:form>
+            <p:panel header="Create-extract" style="margin:20px;">
+
+                <p:panelGrid columns="4"
+                             columnClasses="labelCol,inputCol,labelCol,inputCol"
+                             style="width:100%;">
+
+                    <!-- Row 1 -->
+                    <h:outputLabel for="date" value="Date:" />
+                    <p:calendar id="date"
+                                value="#{extractBean.date}"
+                                pattern="yyyy-MM-dd"
+                                showIcon="true"
+                                style="width:100%;"/>
+
+                    <h:outputLabel for="diagnosis" value="Diagnosis:" />
+                    <p:inputTextarea id="diagnosis"
+                                     value="#{extractBean.diagnosis}"
+                                     rows="3"
+                                     maxlength="5000"
+                                     style="width:100%;"/>
+
+                    <!-- Row 2 -->
+                    <h:outputLabel for="prescription" value="Prescription:" />
+                    <p:inputTextarea id="prescription"
+                                     value="#{extractBean.prescription}"
+                                     rows="3"
+                                     maxlength="5000"
+                                     style="width:100%;"/>
+
+                    <h:outputLabel for="doctorEmail" value="Doctor email:" />
+                    <p:inputText id="doctorEmail"
+                                 value="#{extractBean.doctorEmail}"
+                                 style="width:100%;"/>
+
+                    <!-- Row 3 -->
+                    <h:outputLabel for="patientEmail" value="Patient email:" />
+                    <p:inputText id="patientEmail"
+                                 value="#{extractBean.patientEmail}"
+                                 style="width:100%;"/>
+
+                    <!-- filler cells to keep grid 4‑columned -->
+                    <h:outputLabel value="" />
+                    <h:outputText value="" />
+                </p:panelGrid>
+
+                <p:separator/>
+
+                <div style="text-align: right; margin-top: 1rem;">
+                    <p:commandButton value="Save"
+                                     icon="pi pi-save"
+                                     action="#{extractBean.save}"
+                                     styleClass="ui-button-success"
+                                     style="margin-right: .5rem;"/>
+                    <p:commandButton value="Download"
+                                     icon="pi pi-download"
+                                     ajax="false"
+                                     action="#{extractExportBean.excelExport}"
+                                     styleClass="ui-button-primary"/>
+                </div>
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
