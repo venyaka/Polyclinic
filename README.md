@@ -71,7 +71,7 @@ java -jar target/user-management.jar
 
 ---
 
-## 🚀 Деплой на WildFly
+## Деплой на WildFly
 
 1. Соберите `.war` файл:
    ```bash
