@@ -1,4 +1,4 @@
-package cushen_group.veniamin.polyclinic.controller;
+package cushen_group.veniamin.polyclinic.bean;
 
 import cushen_group.veniamin.polyclinic.dto.request.ExtractCreateReqDTO;
 import cushen_group.veniamin.polyclinic.service.impl.ExtractServiceImpl;
@@ -13,9 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -26,14 +23,14 @@ public class ExtractBean implements Serializable {
     @Autowired
     private ExtractServiceImpl extractService;
 
-    private Long extractId;
-
-    private String patientEmail;
-    private LocalDate date;
-    private String doctorEmail;
-    private String diagnosis;
-    private String prescription;
-    private List<String> reports = new ArrayList<>();
+//    private Long extractId;
+//
+//    private String patientEmail;
+//    private LocalDate date;
+//    private String doctorEmail;
+//    private String diagnosis;
+//    private String prescription;
+//    private List<String> reports = new ArrayList<>();
     ExtractCreateReqDTO extractCreateReqDTO = new ExtractCreateReqDTO();
 
     public void createExtract() {
@@ -45,14 +42,14 @@ public class ExtractBean implements Serializable {
             Object principal = authentication.getPrincipal();
 
             if (principal instanceof UserDetails userDetails) {
-                doctorEmail = userDetails.getUsername(); // или getEmail(), если ты его переопределил
+                extractCreateReqDTO.setDoctorEmail(userDetails.getUsername()); // или getEmail(), если ты его переопределил
             }
         }
 
-        extractCreateReqDTO.setDoctorEmail(doctorEmail);
-        extractCreateReqDTO.setPatientEmail(patientEmail);
-        extractCreateReqDTO.setDiagnosis(diagnosis);
-        extractCreateReqDTO.setPrescription(prescription);
+//        extractCreateReqDTO.setDoctorEmail(doctorEmail);
+//        extractCreateReqDTO.setPatientEmail(patientEmail);
+//        extractCreateReqDTO.setDiagnosis(diagnosis);
+//        extractCreateReqDTO.setPrescription(prescription);
         extractService.createExtract(extractCreateReqDTO);
     }
 

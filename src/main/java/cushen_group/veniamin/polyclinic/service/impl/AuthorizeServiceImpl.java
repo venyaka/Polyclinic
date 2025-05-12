@@ -3,12 +3,14 @@ package cushen_group.veniamin.polyclinic.service.impl;
 import cushen_group.veniamin.polyclinic.dto.request.RegisterReqDTO;
 import cushen_group.veniamin.polyclinic.dto.request.UserAuthorizeReqDTO;
 import cushen_group.veniamin.polyclinic.dto.response.TokenRespDTO;
+import cushen_group.veniamin.polyclinic.entity.Patient;
 import cushen_group.veniamin.polyclinic.entity.User;
 import cushen_group.veniamin.polyclinic.exception.BadRequestException;
 import cushen_group.veniamin.polyclinic.exception.NotFoundException;
 import cushen_group.veniamin.polyclinic.exception.errors.AuthorizedError;
 import cushen_group.veniamin.polyclinic.exception.errors.BadRequestError;
 import cushen_group.veniamin.polyclinic.exception.errors.NotFoundError;
+import cushen_group.veniamin.polyclinic.repository.PatientRepository;
 import cushen_group.veniamin.polyclinic.repository.UserRepository;
 import cushen_group.veniamin.polyclinic.service.AuthorizeService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -31,6 +34,8 @@ import java.util.Optional;
 public class AuthorizeServiceImpl implements AuthorizeService {
 
     private final UserRepository userRepo;
+
+    private final PatientRepository patientRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -69,18 +74,48 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         if (userRepo.findByEmail(registerDTO.getEmail()).isPresent()) {
             throw new BadRequestException(BadRequestError.USER_ALREADY_EXISTS);
         }
-        User user = new User();
-        user.setEmail(registerDTO.getEmail());
-        user.setName(registerDTO.getName());
-        user.setSurname(registerDTO.getSurname());
-        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        user.setIsEmailVerificated(Boolean.FALSE);
-        user.setToken(generateValidatingToken());
-        user.setRoles(registerDTO.getRoles());
-        userRepo.save(user);
 
-        mailService.sendUserVerificationMail(user, request);
+        Patient patient = new Patient();
+        patient.setEmail(registerDTO.getEmail());
+        patient.setName(registerDTO.getName());
+        patient.setSurname(registerDTO.getSurname());
+        patient.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        patient.setIsEmailVerificated(Boolean.FALSE);
+        patient.setToken(generateValidatingToken());
+        patient.setRoles(registerDTO.getRoles());
+        patient.setDiagnosis(new ArrayList<>());
+        patient.setDoctors(new ArrayList<>());
+
+        patientRepository.save(patient);
+//        userRepo.save(user);
+
+        mailService.sendUserVerificationMail(patient, request);
     }
+
+//
+//    @Override
+//    public void registerUser(RegisterReqDTO registerDTO, HttpServletRequest request) {
+//        if (userRepo.findByEmail(registerDTO.getEmail()).isPresent()) {
+//            throw new BadRequestException(BadRequestError.USER_ALREADY_EXISTS);
+//        }
+//        User user = new User();
+//        user.setEmail(registerDTO.getEmail());
+//        user.setName(registerDTO.getName());
+//        user.setSurname(registerDTO.getSurname());
+//        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+//        user.setIsEmailVerificated(Boolean.FALSE);
+//        user.setToken(generateValidatingToken());
+//        user.setRoles(registerDTO.getRoles());
+//
+//        Patient patient = (Patient) user;
+//        patient.setDiagnosis(new ArrayList<>());
+//        patient.setDoctors(new ArrayList<>());
+//
+//        patientRepository.save(patient);
+//        userRepo.save(user);
+//
+//        mailService.sendUserVerificationMail(user, request);
+//    }
 
     @Override
     public void verificateUser(String email, String verificationToken) {

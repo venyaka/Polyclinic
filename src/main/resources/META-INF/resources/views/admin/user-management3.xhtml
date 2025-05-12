@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Управление пользователями</title>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+</h:head>
+<h:body class="p-4" style="background-color: #f8f9fa;">
+    <h:form id="userForm">
+        <!-- Диалог Пациента -->
+        <p:dialog id="patientDialog" widgetVar="patientDialog" header="Пациент" modal="true" resizable="false">
+            <div class="p-fluid">
+                <p:inputText value="#{userManagementBean.selectedPatient.name}" placeholder="Имя"/>
+                <p:inputText value="#{userManagementBean.selectedPatient.surname}" placeholder="Фамилия"/>
+                <p:inputText value="#{userManagementBean.selectedPatient.email}" placeholder="Email"/>
+            </div>
+            <f:facet name="footer">
+                <p:commandButton value="Сохранить" action="#{userManagementBean.savePatient}"
+                                 update="patientTable" oncomplete="PF('patientDialog').hide()" styleClass="p-button-success"/>
+            </f:facet>
+        </p:dialog>
+
+        <!-- Диалог Врача -->
+        <p:dialog id="doctorDialog" widgetVar="doctorDialog" header="Создание Врача" modal="true" resizable="false">
+            <div class="p-fluid">
+                <p:selectOneMenu value="#{userManagementBean.selectedPatientId}">
+                    <f:selectItems value="#{userManagementBean.patients}" var="p"
+                                   itemValue="#{p.id}" itemLabel="#{p.name} #{p.surname} (#{p.email})"/>
+                </p:selectOneMenu>
+                <p:inputText value="#{userManagementBean.newDoctorSpecialization}" placeholder="Специализация"/>
+            </div>
+            <f:facet name="footer">
+                <p:commandButton value="Создать" action="#{userManagementBean.createDoctorFromPatient}"
+                                 update="doctorTable" oncomplete="PF('doctorDialog').hide()" styleClass="p-button-success"/>
+            </f:facet>
+        </p:dialog>
+
+        <!-- Вкладки -->
+        <p:tabView>
+            <!-- Пациенты -->
+            <p:tab title="Пациенты">
+                <p:commandButton value="Добавить пациента" icon="pi pi-plus" styleClass="mb-3 p-button-outlined"
+                                 action="#{userManagementBean.initNewPatient}" update="patientDialog"
+                                 oncomplete="PF('patientDialog').show()" />
+
+                <p:dataTable id="patientTable" var="p" value="#{userManagementBean.patients}" styleClass="p-datatable-sm">
+                    <p:column headerText="Имя">
+                        <h:outputText value="#{p.name}" />
+                    </p:column>
+                    <p:column headerText="Фамилия">
+                        <h:outputText value="#{p.surname}" />
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{p.email}" />
+                    </p:column>
+                    <p:column headerText="Действия">
+                        <p:commandButton icon="pi pi-pencil" title="Редактировать"
+                                         action="#{userManagementBean.editPatient(p)}"
+                                         update="patientDialog"
+                                         oncomplete="PF('patientDialog').show()" />
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+
+            <!-- Врачи -->
+            <p:tab title="Врачи">
+                <p:commandButton value="Добавить врача" icon="pi pi-plus" styleClass="mb-3 p-button-outlined"
+                                 action="#{userManagementBean.initNewDoctor}" update="doctorDialog"
+                                 oncomplete="PF('doctorDialog').show()" />
+
+                <p:dataTable id="doctorTable" var="d" value="#{userManagementBean.doctors}" styleClass="p-datatable-sm">
+                    <p:column headerText="Имя">
+                        <h:outputText value="#{d.name}" />
+                    </p:column>
+                    <p:column headerText="Фамилия">
+                        <h:outputText value="#{d.surname}" />
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{d.email}" />
+                    </p:column>
+                    <p:column headerText="Специализация">
+                        <h:outputText value="#{d.specialization}" />
+                    </p:column>
+                    <p:column headerText="Действия">
+                        <p:commandButton icon="pi pi-pencil" title="Редактировать"
+                                         action="#{userManagementBean.editDoctor(d)}"
+                                         update="doctorDialog"
+                                         oncomplete="PF('doctorDialog').show()" />
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+        </p:tabView>
+    </h:form>
+</h:body>
+</html>

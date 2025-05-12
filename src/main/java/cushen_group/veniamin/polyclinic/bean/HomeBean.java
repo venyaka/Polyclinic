@@ -1,4 +1,4 @@
-package cushen_group.veniamin.polyclinic.controller;
+package cushen_group.veniamin.polyclinic.bean;
 
 import jakarta.faces.view.ViewScoped;
 import lombok.Getter;

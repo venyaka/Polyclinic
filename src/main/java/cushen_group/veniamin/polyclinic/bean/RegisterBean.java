@@ -1,7 +1,6 @@
-package cushen_group.veniamin.polyclinic.controller;
+package cushen_group.veniamin.polyclinic.bean;
 
 import cushen_group.veniamin.polyclinic.dto.request.RegisterReqDTO;
-import cushen_group.veniamin.polyclinic.entity.Role;
 import cushen_group.veniamin.polyclinic.service.impl.AuthorizeServiceImpl;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -24,36 +21,18 @@ public class RegisterBean implements Serializable {
     @Autowired
     private AuthorizeServiceImpl authorizeService;
 
-    private String name;
-
-    private String surname;
-
-    private String password;
-
-    private String email;
-
-    private Role role;
+    private RegisterReqDTO registerDTO = new RegisterReqDTO();
 
     public void registerUser() {
         System.out.println("registerUser");
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        System.out.println(request);
-
-        RegisterReqDTO registerDTO = new RegisterReqDTO();
-        registerDTO.setEmail(email);
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        registerDTO.setRoles(roles);
-        registerDTO.setName(name);
-        registerDTO.setSurname(surname);
-        registerDTO.setPassword(password);
         authorizeService.registerUser(registerDTO, request);
-        System.out.println("registerUser");
     }
+
     public void sendVerificationCode() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         System.out.println("sendVerificationCode");
-        authorizeService.sendVerificationCode(email, request);
+        authorizeService.sendVerificationCode(registerDTO.getEmail(), request);
         System.out.println("sendVerificationCode__2");
 
     }

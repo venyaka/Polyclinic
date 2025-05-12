@@ -10,8 +10,12 @@ import cushen_group.veniamin.polyclinic.exception.errors.BadRequestError;
 import cushen_group.veniamin.polyclinic.exception.errors.NotFoundError;
 import cushen_group.veniamin.polyclinic.repository.UserRepository;
 import cushen_group.veniamin.polyclinic.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,6 +47,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserRespDTO> getAllUsersDTO() {
+        List<UserRespDTO> userDTOS = this.getAllUsers().stream().map(this::getResponseDTO).toList();
+
+        return userDTOS;
+    }
+
+    @Override
     public boolean deleteUserById(Long id) {
         userRepository.deleteById(id);
         if (userRepository.findById(id).isPresent()) {
@@ -61,6 +72,29 @@ public class UserServiceImpl implements UserService {
         return optionalUser.get();
     }
 
+    @Transactional
+    public void assignRole(Long userId, Role role) {
+        System.out.println("assignRole()  ----------------------START--------------------");
+
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            throw new NotFoundException(NotFoundError.USER_NOT_FOUND);
+        }
+        System.out.println("assignRole()  ----------------------2--------------------");
+
+        User user = optionalUser.get();
+        user.setRoles(Set.of(role));
+
+        userRepository.save(user);
+
+    }
+
+    public boolean hasRole(UserRespDTO user, String role) {
+        return user.getRoles().stream()
+                .anyMatch(n -> n.getAuthority().equals(role));
+    }
+//
 //    @Override
 //    public User createUser(UserCreateReqDTO userCreateReqDTO) {
 //        Optional<User> optionalUser = userRepository.findByEmail(userCreateReqDTO.getEmail());
@@ -128,6 +162,11 @@ public class UserServiceImpl implements UserService {
         if (null != userUpdateReqDTO.getRoles() && userUpdateReqDTO.getRoles().isEmpty()) {
             throw new BadRequestException(BadRequestError.NOT_CORRECT_REQUEST_BODY_DATA);
         }
+    }
+
+    private User getCurrentUser(){
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(userEmail).get();
     }
 
 }

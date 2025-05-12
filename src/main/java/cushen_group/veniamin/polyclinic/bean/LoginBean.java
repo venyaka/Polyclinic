@@ -1,4 +1,4 @@
-//package cushen_group.veniamin.polyclinic.controller;
+//package cushen_group.veniamin.polyclinic.bean;
 //
 //import cushen_group.veniamin.polyclinic.dto.request.UserAuthorizeReqDTO;
 //import cushen_group.veniamin.polyclinic.dto.response.TokenRespDTO;
@@ -24,23 +24,12 @@
 //    @Autowired
 //    private AuthorizeService authorizeService;
 //
-//    private String email;
-//
-//    private String password;
+//    private UserAuthorizeReqDTO userAuthorizeDTO = new UserAuthorizeReqDTO();;
 //
 //    public ResponseEntity<TokenRespDTO> login() {
 //        System.out.println("login login loginloginlogin login");
-//        UserAuthorizeReqDTO userAuthorizeDTO = new UserAuthorizeReqDTO();
-//        userAuthorizeDTO.setEmail(email);
-//        userAuthorizeDTO.setPassword(password);
-//
-//        System.out.println("login" + email + password);
+//        System.out.println("login" + userAuthorizeDTO.getEmail() + userAuthorizeDTO.getPassword());
 //        return authorizeService.authorizeUser(userAuthorizeDTO);
-////        try {
-////            ec.redirect(ec.getRequestContextPath() + "/login?email=" + email + "&password=" + password);
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-////        return null;
+//
 //    }
 //}

@@ -1,23 +1,66 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:faces="jakarta.faces"
-                xmlns:ui="jakarta.faces.facelets"
-                xmlns:f="jakarta.faces.core"
-                xmlns:h="jakarta.faces.html"
-                xmlns:pt="jakarta.faces.passthrough"
-                xmlns:cc="jakarta.faces.composite"
-                xmlns:c="jakarta.tags.core"
-                xmlns:p="primefaces"
-                xmlns:fn="jakarta.tags.functions"
-                template="layout.xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="title">Doctor Cabinet</ui:define>
+<h:head>
+    <title>Личный кабинет врача</title>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+</h:head>
 
-    <ui:define name="content">
-        <h:form>
-            <p:panel header="Create Medical Record">
-                <p:button outcome="/extract" value="Create extract"/>
-            </p:panel>
-        </h:form>
-    </ui:define>
+<h:body style="background-color: #f0f2f5;">
+    <h:form>
+        <div class="p-4 md:p-6 lg:p-8">
+            <div class="surface-card p-5 shadow-2 border-round">
+                <!-- Данные врача -->
+                <h2 class="text-2xl font-bold mb-3">Личный кабинет врача</h2>
+                <div class="mb-4 grid grid-nogutter gap-2">
+                    <div class="col-12 md:col-4">
+                        <h:outputLabel value="ФИО:" styleClass="font-medium" />
+                    </div>
+                    <div class="col-12 md:col-8">
+                        <h:outputText value="#{doctorBean.doctorCabinetDTO.name}" />
+                        <h:outputText value="#{doctorBean.doctorCabinetDTO.surname}" />
+                    </div>
 
-</ui:composition>
+                    <div class="col-12 md:col-4">
+                        <h:outputLabel value="Специализация:" styleClass="font-medium" />
+                    </div>
+                    <div class="col-12 md:col-8">
+                        <h:outputText value="#{doctorBean.doctorCabinetDTO.specialization}" />
+                    </div>
+
+                    <div class="col-12 md:col-4">
+                        <h:outputLabel value="Email:" styleClass="font-medium" />
+                    </div>
+                    <div class="col-12 md:col-8">
+                        <h:outputText value="#{doctorBean.doctorCabinetDTO.email}" />
+                    </div>
+                </div>
+
+                <!-- Список пациентов -->
+                <h3 class="text-xl font-semibold mt-4 mb-2">Список пациентов</h3>
+                <p:dataTable value="#{doctorBean.doctorCabinetDTO.patients}" var="patient"
+                             styleClass="w-full" stripedRows="true"
+                             emptyMessage="Нет пациентов">
+                    <p:column headerText="ФИО">
+                        <h:outputText value="#{patient.name}" />
+                    </p:column>
+                    <p:column headerText="Диагноз">
+                        <h:outputText value="#{patient.diagnosis}" />
+                    </p:column>
+                </p:dataTable>
+
+                <!-- Кнопка перейти к выписке -->
+                <div class="mt-4 text-right">
+                    <p:commandButton value="Сформировать выписку"
+                                     outcome="createDischarge"
+                                     icon="pi pi-file"
+                                     styleClass="ui-button ui-button-info" />
+                </div>
+            </div>
+        </div>
+    </h:form>
+</h:body>
+</html>

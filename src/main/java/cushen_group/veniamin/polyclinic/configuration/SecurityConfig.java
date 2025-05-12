@@ -5,6 +5,7 @@ import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,20 +39,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .exceptionHandling(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/home","/register", "/jakarta.faces.resource/**", "/register/verification").permitAll()
-//                        .requestMatchers("/**").permitAll() // only for develop
+                        .requestMatchers("/favicon.ico", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/authorize/login","/register", "/jakarta.faces.resource/**", "/register/verification").permitAll()
+                        .requestMatchers("/**").permitAll() // only for develop
+                        .requestMatchers("/home").hasAnyRole("DOCTOR", "ADMIN", "PATIENT")
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/doctor").hasRole("DOCTOR")
                         .requestMatchers("/patient").hasRole("PATIENT")
+                        .requestMatchers("/**/*.xhtml").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .successForwardUrl("/home")
-                        .defaultSuccessUrl("/home", true)
+//                        .successForwardUrl("/home.xhtml")
+                        .defaultSuccessUrl("/home.xhtml", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

@@ -1,20 +1,39 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:faces="jakarta.faces"
-                xmlns:ui="jakarta.faces.facelets"
-                xmlns:f="jakarta.faces.core"
-                xmlns:h="jakarta.faces.html"
-                xmlns:pt="jakarta.faces.passthrough"
-                xmlns:cc="jakarta.faces.composite"
-                xmlns:c="jakarta.tags.core"
-                xmlns:p="primefaces"
-                xmlns:fn="jakarta.tags.functions"
-                template="layout.xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+<h:head>
+    <title>Главная страница</title>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+</h:head>
+<h:body style="background-color: #f0f2f5;">
+    <h:form>
+        <div class="flex justify-content-center align-items-center h-screen">
+            <div class="surface-card p-4 shadow-2 border-round w-full sm:w-30rem text-center">
+                <h:outputText value="Добро пожаловать!" styleClass="text-xl font-bold" />
+                <p class="text-color-secondary mb-4">Вы успешно вошли в систему.</p>
 
-    <ui:define name="title">Home</ui:define>
+                <p:commandButton value="Личный кабинет"
+                                 outcome="/profile"
+                                 styleClass="w-full mb-3" />
 
-    <ui:define name="content">
-        <p:outputLabel>Welcome to the Medical System</p:outputLabel>
-        <p:outputLabel>This is the homepage.</p:outputLabel>
-    </ui:define>
+                <c:if test="#{userBean.hasRole('ROLE_DOCTOR')}">
+                    <p:commandButton value="Личный кабинет Врача"
+                                     outcome="/doctor"
+                                     styleClass="w-full mb-3"
+                                     style="background-color: #007bff; border: none;" />
+                </c:if>
 
-</ui:composition>
+                <c:if test="#{userBean.hasRole('ROLE_ADMIN')}">
+                    <p:commandButton value="Управление пользователями"
+                                         outcome="/admin/user-management"
+                                     styleClass="w-full mb-3"
+                                     style="background-color: #ff0059; border: none;" />
+                </c:if>
+            </div>
+        </div>
+    </h:form>
+</h:body>
+</html>

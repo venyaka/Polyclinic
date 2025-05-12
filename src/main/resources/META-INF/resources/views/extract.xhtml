@@ -21,14 +21,14 @@
                     <!-- Row 1 -->
                     <h:outputLabel for="date" value="Date:" />
                     <p:calendar id="date"
-                                value="#{extractBean.date}"
+                                value="#{extractBean.extractCreateReqDTO.date}"
                                 pattern="yyyy-MM-dd"
                                 showIcon="true"
                                 style="width:100%;"/>
 
                     <h:outputLabel for="diagnosis" value="Diagnosis:" />
                     <p:inputTextarea id="diagnosis"
-                                     value="#{extractBean.diagnosis}"
+                                     value="#{extractBean.extractCreateReqDTO.diagnosis}"
                                      rows="3"
                                      maxlength="5000"
                                      style="width:100%;"/>
@@ -36,7 +36,7 @@
                     <!-- Row 2 -->
                     <h:outputLabel for="prescription" value="Prescription:" />
                     <p:inputTextarea id="prescription"
-                                     value="#{extractBean.prescription}"
+                                     value="#{extractBean.extractCreateReqDTO.prescription}"
                                      rows="3"
                                      maxlength="5000"
                                      style="width:100%;"/>
@@ -49,7 +49,7 @@
                     <!-- Row 3 -->
                     <h:outputLabel for="patientEmail" value="Patient email:" />
                     <p:inputText id="patientEmail"
-                                 value="#{extractBean.patientEmail}"
+                                 value="#{extractBean.extractCreateReqDTO.patientEmail}"
                                  style="width:100%;"/>
 
                     <!-- filler cells to keep grid 4‑columned -->
@@ -62,13 +62,13 @@
                 <div style="text-align: right; margin-top: 1rem;">
                     <p:commandButton value="Save"
                                      icon="pi pi-save"
-                                     action="#{extractBean.save}"
+                                     action="#{extractBean.createExtract}"
                                      styleClass="ui-button-success"
                                      style="margin-right: .5rem;"/>
                     <p:commandButton value="Download"
                                      icon="pi pi-download"
                                      ajax="false"
-                                     action="#{extractExportBean.excelExport}"
+                                     action="#{extractBean.getExcelExport}"
                                      styleClass="ui-button-primary"/>
                 </div>
 

@@ -22,6 +22,8 @@ public interface UserService extends UserDetailsService {
 
     User updateUser(UserUpdateReqDTO userUpdateReqDTO, Long userId);
 
+    List<UserRespDTO> getAllUsersDTO();
+
     boolean deleteUserById(Long userId);
 
     List<Role> getRoles();

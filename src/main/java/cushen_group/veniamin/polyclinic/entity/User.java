@@ -4,13 +4,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 @Getter
 @Setter
@@ -31,8 +34,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Extract> extracts = new ArrayList<>();
+//    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+//    private List<Extract> extracts = new ArrayList<>();
 
     @Column(name = "date_create")
     private LocalDateTime dateCreate;
